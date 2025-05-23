@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --bgDarkBlueColor: #222432;
+  --bgBeigeColor: #fdf9f8;
+  --bgBeigeHoverColor: #f4e9e1;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 12s linear infinite; /* Reduced from 20s to 12s for faster movement */
+}
+
+.animation-delay-1000 {
+  animation-delay: -6s; /* Adjusted delay to match new speed */
+}
+
+/* Add fade effect at the top */
+.image-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    var(--bgBeigeColor) 0%,
+    transparent 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
