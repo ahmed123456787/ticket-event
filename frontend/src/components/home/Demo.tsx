@@ -46,9 +46,7 @@ const Demo = () => {
 
           {/* Company reviews section */}
           <div className="mt-6">
-            <p className="text-lg font-semibold mb-3">
-              Trusted by leading companies
-            </p>
+            <p className="text-lg font-semibold mb-3">Trusted by leading companies</p>
             <div className="flex flex-wrap gap-6">
               {companyReviews.map((review) => (
                 <div key={review.name} className="flex flex-col">
@@ -59,13 +57,12 @@ const Demo = () => {
                         className="text-amber-300 fill-amber-300 w-5 h-5"
                       />
                     ))}
-                    {review.rating < 5 &&
-                      [...Array(5 - review.rating)].map((_, i) => (
-                        <Star
-                          key={`${review.name}-empty-${i}`}
-                          className="text-amber-300 w-5 h-5"
-                        />
-                      ))}
+                    {review.rating < 5 && [...Array(5 - review.rating)].map((_, i) => (
+                      <Star
+                        key={`${review.name}-empty-${i}`}
+                        className="text-amber-300 w-5 h-5"
+                      />
+                    ))}
                   </div>
                   <p className="text-sm font-medium mt-1 text-gray-700">
                     {review.name}
