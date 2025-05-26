@@ -53,7 +53,7 @@ const Sidebar = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <div className="bg-gray-800 text-white flex flex-col min-h-screen relative">
+    <div className="bg-gray-800 text-white flex flex-col h-full fixed">
       <nav className="flex-1 overflow-y-auto">
         <ul className="py-4">
           {menuItems.map((item) => (

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import StatCard from "./cards/StatCard";
+import PublishedEvents from "./cards/PublishedEvents";
+import RecentActivity from "./cards/RecentActivity";
 import {
   FiUsers,
   FiShoppingBag,
@@ -60,60 +62,69 @@ const Analytics = () => {
   };
 
   return (
-    <div className="flex flex-col bg-white p-4 rounded-lg shadow-sm">
-      {/* The analytics title and filter */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b">
-        <h2 className="text-xl font-bold mb-4 md:mb-0">Analytics</h2>
-        <div className="flex flex-wrap w-full md:w-auto space-x-1 bg-gray-100 rounded-lg p-1">
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              className={`px-3 py-1 text-sm rounded-md transition-all ${
-                selectedFilter === filter.id
-                  ? "bg-white shadow-sm text-blue-600 font-medium"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-              onClick={() => handleFilterChange(filter.id)}
-            >
-              {filter.label}
-            </button>
-          ))}
+    <div className="flex flex-col space-y-6">
+      {/* The analytics stats section */}
+      <div className="flex flex-col bg-white p-4 rounded-lg shadow-sm">
+        {/* The analytics title and filter */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b">
+          <h2 className="text-xl font-bold mb-4 md:mb-0">Analytics</h2>
+          <div className="flex flex-wrap w-full md:w-auto space-x-1 bg-gray-100 rounded-lg p-1">
+            {filters.map((filter) => (
+              <button
+                key={filter.id}
+                className={`px-3 py-1 text-sm rounded-md transition-all ${
+                  selectedFilter === filter.id
+                    ? "bg-white shadow-sm text-blue-600 font-medium"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+                onClick={() => handleFilterChange(filter.id)}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <StatCard
+            title="Total Users"
+            value={currentData.users.value}
+            icon={<FiUsers size={20} />}
+            change={currentData.users.change}
+            trend={currentData.users.trend as "up" | "down" | "neutral"}
+          />
+
+          <StatCard
+            title="Orders"
+            value={currentData.orders.value}
+            icon={<FiShoppingBag size={20} />}
+            change={currentData.orders.change}
+            trend={currentData.orders.trend as "up" | "down" | "neutral"}
+          />
+
+          <StatCard
+            title="Tickets Sold"
+            value={currentData.ticketsSold.value}
+            icon={<FiCreditCard size={20} />}
+            change={currentData.ticketsSold.change}
+            trend={currentData.ticketsSold.trend as "up" | "down" | "neutral"}
+          />
+
+          <StatCard
+            title="Total Revenue"
+            value={currentData.revenue.value}
+            icon={<FiDollarSign size={20} />}
+            change={currentData.revenue.change}
+            trend={currentData.revenue.trend as "up" | "down" | "neutral"}
+          />
         </div>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        <StatCard
-          title="Total Users"
-          value={currentData.users.value}
-          icon={<FiUsers size={20} />}
-          change={currentData.users.change}
-          trend={currentData.users.trend as "up" | "down" | "neutral"}
-        />
-
-        <StatCard
-          title="Orders"
-          value={currentData.orders.value}
-          icon={<FiShoppingBag size={20} />}
-          change={currentData.orders.change}
-          trend={currentData.orders.trend as "up" | "down" | "neutral"}
-        />
-
-        <StatCard
-          title="Tickets Sold"
-          value={currentData.ticketsSold.value}
-          icon={<FiCreditCard size={20} />}
-          change={currentData.ticketsSold.change}
-          trend={currentData.ticketsSold.trend as "up" | "down" | "neutral"}
-        />
-
-        <StatCard
-          title="Total Revenue"
-          value={currentData.revenue.value}
-          icon={<FiDollarSign size={20} />}
-          change={currentData.revenue.change}
-          trend={currentData.revenue.trend as "up" | "down" | "neutral"}
-        />
+      {/* Activity and Events section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RecentActivity />
+        <PublishedEvents />
       </div>
     </div>
   );
