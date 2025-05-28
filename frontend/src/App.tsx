@@ -6,6 +6,7 @@ import EventCreatePage from "./pages/EventCreatePage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import OrdersPage from "./pages/OrdersPage";
 import MarketingPage from "./pages/MarketingPage";
+import MarektingEmComp from "./pages/MarektingEmComp";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
         />
         <Route path="organizations/orders" element={<OrdersPage />} />
         <Route path="organizations/marketing" element={<MarketingPage />} />
+        <Route
+          path="organizations/marketing/email-campaigns"
+          element={<MarektingEmComp />}
+        />
       </Routes>
     </BrowserRouter>
   );
