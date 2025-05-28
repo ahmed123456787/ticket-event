@@ -49,7 +49,7 @@ const EventCreatePage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Event data submitted:", eventData);
-    // Here you would typically send the data to your backend
+    
   };
 
   return (
@@ -417,13 +417,11 @@ const EventCreatePage = () => {
                 name="timezone"
                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="GMT+01:00">
-                  GMT+01:00) West Central Africa
-                </option>
-                <option value="GMT">GMT) Greenwich Mean Time</option>
-                <option value="EST">EST) Eastern Standard Time</option>
-                <option value="PST">PST) Pacific Standard Time</option>
-                <option value="CST">CST) Central Standard Time</option>
+                <option value="GMT+01:00">GMT+01:00 West Central Africa</option>
+                <option value="GMT">GMT Greenwich Mean Time</option>
+                <option value="EST">EST Eastern Standard Time</option>
+                <option value="PST">PST Pacific Standard Time</option>
+                <option value="CST">CST Central Standard Time</option>
               </select>
             </div>
 

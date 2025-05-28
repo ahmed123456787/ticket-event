@@ -4,6 +4,8 @@ import DashboardPage from "./pages/DashboardPage";
 import EventsPage from "./pages/EventsPage";
 import EventCreatePage from "./pages/EventCreatePage";
 import EventDetailsPage from "./pages/EventDetailsPage";
+import OrdersPage from "./pages/OrdersPage";
+import MarketingPage from "./pages/MarketingPage";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           path="organizations/events/:eventId"
           element={<EventDetailsPage />}
         />
+        <Route path="organizations/orders" element={<OrdersPage />} />
+        <Route path="organizations/marketing" element={<MarketingPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -13,12 +13,12 @@ const Profile = () => {
       {/* Profile Button */}
       <button
         onClick={toggleDropdown}
-        className="flex items-center space-x-2 px- py-1 rounded-3xl bg-gray-200 hover:bg-gray-300 transition"
+        className="flex items-center space-x-2 px-2 py-1 rounded-3xl bg-gray-200 hover:bg-gray-300 transition"
       >
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white text-xs font-bold ">
+        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500 text-white text-xs font-bold ">
           AH
         </div>
-        <span className="hidden sm:block text-sm ">Ahmed</span>
+        <span className="hidden sm:block text-xs ">Ahmed</span>
       </button>
 
       {/* Dropdown Menu */}
