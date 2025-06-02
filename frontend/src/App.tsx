@@ -7,6 +7,7 @@ import EventDetailsPage from "./pages/EventDetailsPage";
 import OrdersPage from "./pages/OrdersPage";
 import MarketingPage from "./pages/MarketingPage";
 import MarektingEmComp from "./pages/MarektingEmComp";
+import EmailCompaign from "./pages/EmailCompaign";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
         <Route
           path="organizations/marketing/email-campaigns"
           element={<MarektingEmComp />}
+        />
+        <Route
+          path="organizations/marketing/email-campaigns/:campaignId"
+          element={<EmailCompaign />}
         />
       </Routes>
     </BrowserRouter>
