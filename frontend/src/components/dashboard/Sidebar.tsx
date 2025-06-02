@@ -9,7 +9,7 @@ import {
   Settings,
 } from "lucide-react";
 
-const iconSize = 32;
+const iconSize = 26;
 const iconStrokeWidth = 2;
 const BASE_ROUTE = "/organizations";
 
@@ -53,14 +53,14 @@ const Sidebar = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <div className="bg-gray-800 text-white flex flex-col h-full fixed">
-      <nav className="flex-1 overflow-y-auto">
+    <div className="bg-gray-800 text-white flex  flex-col h-full fixed">
+      <nav className="flex-1 overflow-y-auto ">
         <ul className="py-4">
           {menuItems.map((item) => (
             <li key={item.title}>
               <Link
                 to={`${BASE_ROUTE}${item.path}`}
-                className={`flex items-center justify-center m-2 p-3 rounded-lg mb-1 ${
+                className={`flex items-center justify-center m-2  p-1 rounded-lg mb-4 ${
                   activeItem === item.title
                     ? "bg-blue-600"
                     : "hover:bg-gray-700"
