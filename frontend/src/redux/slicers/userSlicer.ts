@@ -10,7 +10,7 @@ export interface UserState {
 const initialState: UserState = {
   userId: "",
   userName: "mohamed",
-  email: "def@gmail.com",
+  email: "deffs@gmail.com",
   organizationName: "dechong",
 };
 

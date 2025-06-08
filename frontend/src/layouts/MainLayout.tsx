@@ -9,7 +9,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         <div className=" flex-shrink-0">
           <Sidebar />
         </div>
-        <main className="flex-1  sm:px-0 md:px-24 mt-12 overflow-y-auto ">
+        <main className="flex-1  sm:px-0 md:px-16  mt-12 overflow-y-auto ">
           {children}
         </main>
       </div>
