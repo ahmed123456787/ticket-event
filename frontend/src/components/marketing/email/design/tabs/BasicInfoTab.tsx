@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
 import FormInput from "../ui/FormInput";
 import FormSection from "../ui/FormSection";
+import { useState } from "react";
 
 interface CampaignInfoProps {
   campaignName: string;
@@ -11,15 +11,10 @@ interface CampaignInfoProps {
 
 const BasicInfoTab = ({ campaignName, setCampaignName }: CampaignInfoProps) => {
   const { email, userName } = useSelector((state: RootState) => state.user);
-  const [campaignInfo, setCampaignInfo] = useState({
-    campaignName: "def",
-    from: userName,
-    replyToEmail: email,
-  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCampaignInfo((prev) => ({ ...prev, [name]: value }));
+    const { value } = e.target;
+    setCampaignName(value);
   };
 
   return (
@@ -36,14 +31,14 @@ const BasicInfoTab = ({ campaignName, setCampaignName }: CampaignInfoProps) => {
         <FormInput
           label="From"
           name="from"
-          value={campaignInfo.from}
-          onChange={handleInputChange}
+          value={campaignName}
+          onChange={(e) => setCampaignName(e.target.value)}
           required
         />
         <FormInput
           label="Reply-to email address"
           name="replyToEmail"
-          value={campaignInfo.replyToEmail}
+          value={email}
           onChange={handleInputChange}
           required
         />

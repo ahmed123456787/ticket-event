@@ -16,7 +16,13 @@ const StyleTab = () => {
     setStyles((prev) => ({ ...prev, [name]: value }));
   };
 
-  const fontOptions = ["Arial", "Helvetica", "Georgia", "Times New Roman", "Courier New"];
+  const fontOptions = [
+    "Arial",
+    "Helvetica",
+    "Georgia",
+    "Times New Roman",
+    "Courier New",
+  ];
 
   return (
     <div className="space-y-8">
@@ -26,7 +32,7 @@ const StyleTab = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Header Color
             </label>
-            <ColorPicker 
+            <ColorPicker
               color={styles.headerColor}
               onChange={(color) => handleColorChange("headerColor", color)}
             />
@@ -35,19 +41,19 @@ const StyleTab = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Background Color
             </label>
-            <ColorPicker 
+            <ColorPicker
               color={styles.backgroundColor}
               onChange={(color) => handleColorChange("backgroundColor", color)}
             />
           </div>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Text Color
             </label>
-            <ColorPicker 
+            <ColorPicker
               color={styles.textColor}
               onChange={(color) => handleColorChange("textColor", color)}
             />
@@ -56,20 +62,22 @@ const StyleTab = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Button Color
             </label>
-            <ColorPicker 
+            <ColorPicker
               color={styles.buttonColor}
               onChange={(color) => handleColorChange("buttonColor", color)}
             />
           </div>
         </div>
-        
+
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Font Family
           </label>
           <select
             value={styles.fontFamily}
-            onChange={(e) => setStyles(prev => ({ ...prev, fontFamily: e.target.value }))}
+            onChange={(e) =>
+              setStyles((prev) => ({ ...prev, fontFamily: e.target.value }))
+            }
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {fontOptions.map((font) => (
@@ -80,7 +88,7 @@ const StyleTab = () => {
           </select>
         </div>
       </FormSection>
-      
+
       <FormSection title="Layout Options">
         <div className="space-y-4">
           <div className="flex items-center">
@@ -94,7 +102,7 @@ const StyleTab = () => {
               Show header image
             </label>
           </div>
-          
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -106,7 +114,7 @@ const StyleTab = () => {
               Show footer
             </label>
           </div>
-          
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -114,7 +122,10 @@ const StyleTab = () => {
               className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
               defaultChecked
             />
-            <label htmlFor="showSocialIcons" className="ml-2 text-sm text-gray-700">
+            <label
+              htmlFor="showSocialIcons"
+              className="ml-2 text-sm text-gray-700"
+            >
               Show social icons
             </label>
           </div>

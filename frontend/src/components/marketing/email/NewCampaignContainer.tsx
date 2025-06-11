@@ -106,7 +106,8 @@ const NewCampaignContainer: React.FC<NewCampaignContainerProps> = ({
             className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
             onClick={() => {
               navigate(
-                `/organizations/marketing/email-campaigns/${campaignName}`
+                `/organizations/marketing/email-campaigns/${campaignName}`,
+                { state: { compaignName: campaignName } }
               );
             }}
           >

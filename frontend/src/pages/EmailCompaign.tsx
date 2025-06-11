@@ -1,16 +1,17 @@
 import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import DesignSidebar from "../components/marketing/email/design/DesignSidebar";
-import { useParams } from "react-router";
+import { useLocation } from "react-router-dom";
 
 const EmailCompaign = () => {
-  const { campaignId } = useParams<{ campaignId: string }>();
-  const [campaignName, setCampaignName] = useState(campaignId);
   const [subject, setSubject] = useState(
     "You're invited to test (July 7, 2025)"
   );
+  const location = useLocation();
   const [sendingTestEmail, setSendingTestEmail] = useState(false);
-
+  const [campaignName, setCampaignName] = useState(
+    location.state?.compaignName || "Default Campaign Name"
+  );
   const handleSendTest = () => {
     setSendingTestEmail(true);
     // Mock API call
@@ -22,15 +23,15 @@ const EmailCompaign = () => {
 
   return (
     <MainLayout>
-      {/* Override the MainLayout padding with negative margin and full width */}
-      <div className="flex h-screen overflow-hidden md:-mr-16">
+      <div className="flex h-screen overflow-hidden">
         {/* Left Sidebar */}
-        <div className="w-96 border-r border-gray-200">
+        <div className="w-96 border-r border-gray-200 overflow-y-auto">
           <DesignSidebar
             campaignName={campaignName}
             setCampaignName={setCampaignName}
           />
         </div>
+
         {/* Email Preview Content */}
         <div className="flex-1 flex flex-col">
           {/* Top navigation bar */}
@@ -45,6 +46,9 @@ const EmailCompaign = () => {
                 disabled={sendingTestEmail}
               >
                 {sendingTestEmail ? "Sending..." : "Send test email"}
+              </button>
+              <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">
+                Continue
               </button>
             </div>
           </div>

@@ -15,11 +15,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
   return (
     <div className="relative">
       <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
-        <div 
-          className="w-10 h-8" 
-          style={{ backgroundColor: color }}
-        ></div>
-        <input 
+        <div className="w-10 h-8" style={{ backgroundColor: color }}></div>
+        <input
           type="text"
           value={color}
           onChange={(e) => onChange(e.target.value)}
@@ -33,7 +30,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
           Select
         </button>
       </div>
-      
+
       {showPicker && (
         <div className="absolute mt-1 z-10 bg-white border border-gray-300 p-2 rounded-md shadow-lg">
           <input
