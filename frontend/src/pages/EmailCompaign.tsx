@@ -25,7 +25,7 @@ const EmailCompaign = () => {
     <MainLayout>
       <div className="flex h-screen overflow-hidden">
         {/* Left Sidebar */}
-        <div className="w-96 border-r border-gray-200 overflow-y-auto">
+        <div className="w-96 border-r border-gray-200">
           <DesignSidebar
             campaignName={campaignName}
             setCampaignName={setCampaignName}
@@ -47,46 +47,32 @@ const EmailCompaign = () => {
               >
                 {sendingTestEmail ? "Sending..." : "Send test email"}
               </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">
-                Continue
-              </button>
             </div>
           </div>
 
           {/* Email Preview */}
           <div className="flex-1 p-6 overflow-y-auto bg-gray-100">
-            <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-md overflow-hidden">
+            <div className="max-w-3xl mx-auto  shadow-lg bg-white rounded-md overflow-hidden">
               {/* Email Header */}
-              <div className="p-4 bg-gray-50 border-b border-gray-200">
-                <div className="mb-2">
-                  <span className="text-sm font-medium text-gray-500">
-                    Subject:
-                  </span>
-                  <span className="text-sm ml-1">{subject}</span>
+              <div className="p-4">
+                <div className="mb-2 text-xs  ">
+                  <span className="text-gray-500">Subject:</span>
+                  <span className="text-black ml-1">{subject}</span>
                 </div>
                 <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    From:
-                  </span>
+                  <span className="text-xs text-gray-500">From:</span>
                   <span className="text-sm ml-1">AHMED</span>
                 </div>
               </div>
 
               {/* Email Content */}
               <div className="p-8">
-                <h1 className="text-3xl font-bold mb-6">Email Header</h1>
-                <p className="text-gray-700 mb-4">
-                  Write the text of your email here. Describe the events in this
-                  email and why they can't be missed.
-                </p>
-                <div className="text-center my-8">
-                  <button className="px-6 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700">
-                    Call to Action
-                  </button>
-                </div>
-                <p className="text-gray-700">
-                  Additional information can go here to provide more details
-                  about your event, organization, or offerings.
+                <h1 className="text-3xl text-center mb-6">Email Header</h1>
+                <p className="text-sm mb-24 text-center opacity-70">
+                  Write the text of your email here.
+                  <br />
+                  Describe the events in this email and why they can't be
+                  missed.
                 </p>
               </div>
 

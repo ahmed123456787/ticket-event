@@ -1,5 +1,6 @@
 import { useState } from "react";
 import FormSection from "../ui/FormSection";
+import TextEditor from "../editor/TextEditor";
 
 const ContentTab = () => {
   const [subject, setSubject] = useState(
@@ -28,6 +29,7 @@ const ContentTab = () => {
 
         <div className="mb-4">
           <p className="text-sm font-medium text-gray-700 mb-2">Email Body</p>
+          <TextEditor />
           <div className="bg-gray-100 p-4 rounded-md">
             <p className="text-sm text-gray-600">
               Email content editing will be available in the preview pane.

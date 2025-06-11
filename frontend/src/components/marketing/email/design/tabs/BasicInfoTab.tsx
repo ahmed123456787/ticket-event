@@ -10,7 +10,9 @@ interface CampaignInfoProps {
 }
 
 const BasicInfoTab = ({ campaignName, setCampaignName }: CampaignInfoProps) => {
-  const { email, userName } = useSelector((state: RootState) => state.user);
+  const { email, userName, organizationName } = useSelector(
+    (state: RootState) => state.user
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -54,7 +56,7 @@ const BasicInfoTab = ({ campaignName, setCampaignName }: CampaignInfoProps) => {
         <FormInput
           label="Organizer name"
           name="organizerName"
-          placeholder="AHMED Zater"
+          placeholder={organizationName}
           onChange={() => {}}
           required
         />
