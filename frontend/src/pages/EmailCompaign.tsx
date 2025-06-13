@@ -2,11 +2,11 @@ import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import DesignSidebar from "../components/marketing/email/design/DesignSidebar";
 import { useLocation } from "react-router-dom";
+import { emailContext } from "../contexts/emailContext";
+import { useContext } from "react";
 
 const EmailCompaign = () => {
-  const [subject, setSubject] = useState(
-    "You're invited to test (July 7, 2025)"
-  );
+  const { subject } = useContext(emailContext);
   const location = useLocation();
   const [sendingTestEmail, setSendingTestEmail] = useState(false);
   const [campaignName, setCampaignName] = useState(
@@ -23,13 +23,10 @@ const EmailCompaign = () => {
 
   return (
     <MainLayout>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen ">
         {/* Left Sidebar */}
-        <div className="w-96 border-r border-gray-200">
-          <DesignSidebar
-            campaignName={campaignName}
-            setCampaignName={setCampaignName}
-          />
+        <div className="w-1/3  h-full px-3">
+          <DesignSidebar />
         </div>
 
         {/* Email Preview Content */}
@@ -51,7 +48,7 @@ const EmailCompaign = () => {
           </div>
 
           {/* Email Preview */}
-          <div className="flex-1 p-6 overflow-y-auto bg-gray-100">
+          <div className="flex-1 p-6 min-h-full bg-gray-100">
             <div className="max-w-3xl mx-auto  shadow-lg bg-white rounded-md overflow-hidden">
               {/* Email Header */}
               <div className="p-4">

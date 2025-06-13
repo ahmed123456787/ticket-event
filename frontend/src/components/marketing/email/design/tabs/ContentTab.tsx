@@ -1,6 +1,7 @@
 import { useState } from "react";
 import FormSection from "../ui/FormSection";
 import TextEditor from "../editor/TextEditor";
+import { Search } from "lucide-react";
 
 const ContentTab = () => {
   const [subject, setSubject] = useState(
@@ -9,6 +10,19 @@ const ContentTab = () => {
 
   return (
     <div className="space-y-8">
+      <h2 className="mt-4 ">Choose your events</h2>
+      <div className="mb-4">
+        <div className="flex items-center border border-gray-300 px-3 py-2 space-x-2">
+          <Search className="w-4" />
+          <input
+            type="text"
+            id="search"
+            name="search"
+            placeholder="search for events"
+            className="flex-1 focus:outline-none text-xs text-gray-500"
+          />
+        </div>
+      </div>
       <FormSection title="Email Content">
         <div className="mb-4">
           <label

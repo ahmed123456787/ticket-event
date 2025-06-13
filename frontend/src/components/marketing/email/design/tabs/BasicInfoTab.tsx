@@ -20,7 +20,7 @@ const BasicInfoTab = ({ campaignName, setCampaignName }: CampaignInfoProps) => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 h-full overflow-y-auto">
       {/* Campaign information section */}
       <FormSection title="Campaign information">
         <FormInput
@@ -33,7 +33,7 @@ const BasicInfoTab = ({ campaignName, setCampaignName }: CampaignInfoProps) => {
         <FormInput
           label="From"
           name="from"
-          value={campaignName}
+          value={userName || ""}
           onChange={(e) => setCampaignName(e.target.value)}
           required
         />

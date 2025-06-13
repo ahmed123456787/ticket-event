@@ -37,7 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_filters",
+    "graphene_django",
+    'ticket_system.core',
+    'rest_framework',  # Django REST Framework for API development
 ]
+
+GRAPHENE = {
+    "SCHEMA": "ticket_system.schema.schema"
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
