@@ -24,6 +24,7 @@ class CustomUserManager(UserManager):
         Create and return a superuser with an email and password.
         """
         extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(name, email, password, **extra_fields)

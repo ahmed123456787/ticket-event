@@ -75,7 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ticket_system.wsgi.application'
-
+AUTH_USER_MODEL = 'core.Organization'  # Custom user model
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

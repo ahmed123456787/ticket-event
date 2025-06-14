@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from .manager import CustomUserManager 
 
-class Organization(AbstractBaseUser):
+class Organization(AbstractBaseUser, PermissionsMixin):
     """
     Model representing an organizer in the ticket system.
     This model extends AbstractBaseUser to allow custom user management.
@@ -20,6 +20,25 @@ class Organization(AbstractBaseUser):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        # Hash the password if it's not already hashed
+        if self.password and not self.password.startswith('pbkdf2_'):
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
+
+
+
+class Visitor(models.Model):
+    """
+    Model representing a visitor in the ticket system.
+    """
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=False)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 
 class Event(models.Model):
     """
@@ -33,6 +52,11 @@ class Event(models.Model):
     organizer = models.ForeignKey(Organization, on_delete=models.CASCADE,related_name='events')
     discount_for_tickets = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     ticket_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    visitors = models.ManyToManyField(
+        Visitor,
+        through='EventTicket',
+        related_name='events'
+    )
 
     def __str__(self):
         return self.name
@@ -45,16 +69,7 @@ class Event(models.Model):
         return self.nb_tickets - self.tickets.filter(is_used=False).count()
 
 
-class Visitor(models.Model):
-    """
-    Model representing a visitor in the ticket system.
-    """
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15, blank=True, null=True)
 
-    def __str__(self):
-        return self.name
     
 
 class EventTicket(models.Model):
