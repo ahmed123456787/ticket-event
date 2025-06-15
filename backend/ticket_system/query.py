@@ -13,12 +13,11 @@ class Query(ObjectType):
     visitors = List(VisitorType)
     visitor = Field(VisitorType, id=ID(required=True))
     
-    # Organization fields with filtering
     organization = Field(OrganizationType, id=ID(required=True))
-    # Use DjangoFilterConnectionField for filtered connections
     organizations = DjangoFilterConnectionField(OrganizationType)
 
     def resolve_events(self, info):
+        print(info.context.user.is_authenticated)
         return Event.objects.all()
 
     def resolve_event(self, info, id):

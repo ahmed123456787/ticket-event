@@ -134,6 +134,7 @@ class CreateOriganization(Mutation):
         )
         organization.save()
         return CreateOriganization(organization=organization)
+    
 ##########################################################################################
 
 class UpdateEvent(Mutation):
