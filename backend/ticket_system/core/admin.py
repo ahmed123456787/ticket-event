@@ -28,9 +28,9 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(EventTicket)
 class EventTicketAdmin(admin.ModelAdmin):
-    list_display = ('id', 'ticket_code', 'event', 'user', 'purshased_date', 'is_used', 'price_paid', 'status')
+    list_display = ('id', 'ticket_code', 'event', 'user', 'purshased_date', 'is_used', 'price_paid',)
     search_fields = ('ticket_code', 'event__name', 'user__name', 'user__email')
-    list_filter = ('is_used', 'event', 'status')
+    list_filter = ('is_used', 'event',)
 
 @admin.register(EventStats)
 class EventStatsAdmin(admin.ModelAdmin):

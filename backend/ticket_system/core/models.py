@@ -69,17 +69,12 @@ class EventTicket(models.Model):
     """
     Model representing an event ticket in the ticket system.
     """
-    STATUS_CHOICES = (
-        ('active', 'Active'),
-        ('cancelled', 'Cancelled'),
-        ('used', 'Used'),
-    )
+  
 
     ticket_code = models.CharField(max_length=20, unique=True)
     description = models.TextField()
     purshased_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     is_used = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
