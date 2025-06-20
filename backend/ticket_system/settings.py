@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_filters",
     "graphene_django",
-    'ticket_system.core',
+    'ticket_system.core',  # Make sure this is included
+    'ticket_system.events',  # Custom app for events
+    'ticket_system.services',  # Custom app for services
     'rest_framework',  # Django REST Framework for API development
+    'corsheaders',  # Add CORS support
+    'drf_spectacular',  
 ]
 
 GRAPHENE = {
@@ -48,6 +52,7 @@ GRAPHENE = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Add at the top
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,8 +60,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # For development only, restrict in production
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'ticket_system.urls'
 
@@ -76,7 +84,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ticket_system.wsgi.application'
-AUTH_USER_MODEL = 'core.Organization'  # Custom user model
+AUTH_USER_MODEL = 'core.User'  # Updated to use the new User model
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -88,6 +96,12 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

@@ -1,25 +1,20 @@
-from .models import * 
+from .models import Event, EventTicket, EventStats, User
 from rest_framework.serializers import ModelSerializer
 
 
 
-class VisitorSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
-        model = Visitor
-        fields = '__all__'
-
-
-class OrganizationSerializer(ModelSerializer):
-    class Meta:
-        model = Organization
-        fields = '__all__'
+        model = User
+        fields = ('id', 'name', 'email', 'phone', 'role', 'is_active')
+        read_only_fields = ('id', 'date_joined')
 
 
 class EventSerializer(ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
-        read_only_fields = ('id', 'organizer', 'visitors')
+        read_only_fields = ('id', 'organizer', 'attendees')
 
     def create(self, validated_data):
         event = Event.objects.create(**validated_data)
@@ -37,12 +32,11 @@ class EventSerializer(ModelSerializer):
         return instance
     
 
-    
 class EventTicketSerializer(ModelSerializer):
     class Meta:
         model = EventTicket
         fields = '__all__'
-        read_only_fields = ('id', 'event', 'visitor')
+        read_only_fields = ('id', 'event', 'user')
 
     def create(self, validated_data):
         ticket = EventTicket.objects.create(**validated_data)
@@ -50,6 +44,13 @@ class EventTicketSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.event = validated_data.get('event', instance.event)
-        instance.visitor = validated_data.get('visitor', instance.visitor)
+        instance.user = validated_data.get('user', instance.user)
         instance.save()
         return instance
+
+
+class EventStatsSerializer(ModelSerializer):
+    class Meta:
+        model = EventStats
+        fields = '__all__'
+        read_only_fields = ('id', 'timestamp')

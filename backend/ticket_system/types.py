@@ -1,25 +1,26 @@
 import graphene
-from graphene import  Int
+from graphene import Int
 from graphene_django import DjangoObjectType
-from ticket_system.core.models import Event, EventTicket, Visitor, Organization
+from ticket_system.core.models import Event, EventTicket, EventStats, User
 import django_filters
 
 
-class OrganizationFilter(django_filters.FilterSet):
+class UserFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
     email = django_filters.CharFilter(lookup_expr='iexact')
+    role = django_filters.CharFilter(lookup_expr='exact')
     
     class Meta:
-        model = Organization
-        fields = ['name', 'email']
+        model = User
+        fields = ['name', 'email', 'role']
 
 
-class OrganizationType(DjangoObjectType):
+class UserType(DjangoObjectType):
     class Meta:
-        model = Organization
-        filterset_class = OrganizationFilter
+        model = User
+        filterset_class = UserFilter
         interfaces = (graphene.relay.Node,)
-        fields = ("id", "name", "email","password" "phone", "address", "created_at", "updated_at")  # Add all relevant fields
+        fields = ('id', 'email', 'name', 'phone', 'role', 'is_active', 'date_joined')
 
 class EventType(DjangoObjectType):
     available_tickets = Int()
@@ -33,15 +34,26 @@ class EventType(DjangoObjectType):
         return self.available_tickets
 
 
-class VisitorType(DjangoObjectType):
-    class Meta:
-        model = Visitor
-        fields = ('id', 'name', 'email', 'phone', 'tickets')
-
-
-
 class TicketType(DjangoObjectType):
     class Meta:
         model = EventTicket
         fields = ('id', 'ticket_code', 'description', 'purshased_date',
-                 'updated_at', 'is_used', 'visitor', 'event', 'price_paid')
+                 'updated_at', 'is_used', 'user', 'event', 'price_paid')
+
+
+class EventStatsFilter(django_filters.FilterSet):
+    action_type = django_filters.CharFilter(lookup_expr='exact')
+    start_date = django_filters.DateTimeFilter(field_name='timestamp', lookup_expr='gte')
+    end_date = django_filters.DateTimeFilter(field_name='timestamp', lookup_expr='lte')
+    
+    class Meta:
+        model = EventStats
+        fields = ['event', 'action_type', 'user']
+
+
+class EventStatsType(DjangoObjectType):
+    class Meta:
+        model = EventStats
+        filterset_class = EventStatsFilter
+        interfaces = (graphene.relay.Node,)
+        fields = ('id', 'event', 'action_type', 'user', 'timestamp', 'ip_address', 'user_agent', 'referrer')
