@@ -43,10 +43,11 @@ class Event(models.Model):
     """
     name = models.CharField(max_length=100)
     date = models.DateTimeField()
+    # end_date = models.DateTimeField()
     location = models.CharField(max_length=200)
     nb_tickets = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=False)
-    image_banner = models.ImageField(upload_to='event_images/', blank=True, null=True)
+    image_banner = models.ImageField(upload_to='staticfiles/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organized_events')
     discount_for_tickets = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
@@ -69,15 +70,25 @@ class EventTicket(models.Model):
     """
     Model representing an event ticket in the ticket system.
     """
-  
+    
+    TICKET_TYPES = [
+        ('STANDARD', 'Standard'),
+        ('VIP', 'VIP'),
+        ('EARLY_BIRD', 'Early Bird'),
+    ]
+
     ticket_code = models.CharField(max_length=20, unique=True)
     description = models.TextField(null=True, blank=True)
     purshased_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_used = models.BooleanField(default=False)
+    check_in_date = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
     price_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    ticket_type = models.CharField(max_length=50, default='STANDARD', choices=TICKET_TYPES)
+    qr_code_image = models.ImageField(upload_to='ticket_qr_codes/', blank=True, null=True)
+    
 
     def __str__(self):
         return self.ticket_code

@@ -68,15 +68,23 @@ class TicketPaymentSerializer(ModelSerializer):
     def create(self, validated_data):
         event = validated_data.get('event')
 
+        # Find an existing ticket for the user and event
+        try:
+            ticket = EventTicket.objects.get(event=event, user=self.context['request'].user)
+        except EventTicket.DoesNotExist:
+            raise ValueError("No ticket found for the user and event.")
+
         # Reduce ticket count
         event.nb_tickets -= 1
         event.save()
 
-        # Generate ticket code
+        # Update ticket code
         ticket_code = f"{event.id}-{timezone.now().timestamp()}"
-        validated_data['ticket_code'] = ticket_code
+        ticket.ticket_code = ticket_code
+        ticket.price_paid = validated_data.get('price_paid', ticket.price_paid)
+        ticket.save()
 
-        return super().create(validated_data)
+        return ticket
 
 class TicketCheckInSerializer(ModelSerializer):
     class Meta: 

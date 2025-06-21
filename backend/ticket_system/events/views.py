@@ -7,6 +7,12 @@ from ticket_system.core.permissions import IsAdminUser, IsOrganizerUser, IsVisit
 from .serializers import EventSerializer, TicketSerializer, TicketPaymentSerializer, TicketCheckInSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import action
+from ticket_system.services.email_service import send_email_via_sendgrid
+from ticket_system.services.qr_code import generate_ticket_image
+import base64
+import os
+from django.conf import settings
+
 
 
 class EventViewSet(ModelViewSet):
@@ -97,16 +103,60 @@ class EventTicketViewSet(ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated, IsVisitor])
     def purchase(self, request):
-        """Purchase a ticket for an event"""
+        """Purchase a ticket for an event and receive QR code via email"""
 
-        
-        serializer = TicketPaymentSerializer(data=request.data)
+        serializer = TicketPaymentSerializer(data=request.data, context={'request': request})
+
         if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+            ticket = serializer.save(user=request.user)  
+
+            # Generate QR code image
+            qr_buffer = generate_ticket_image(ticket)
+            
+            # Save QR code image to a folder
+            qr_dir = os.path.join(settings.MEDIA_ROOT, 'qr_codes')
+            os.makedirs(qr_dir, exist_ok=True)
+            
+            # Save the image file
+            filename = f'ticket_{ticket.ticket_code}.png'
+            file_path = os.path.join(qr_dir, filename)
+            with open(file_path, 'wb') as f:
+                f.write(qr_buffer.getvalue())
+                    
+            # Create URL for the saved image (for API response)
+            qr_image_url = f'..{settings.MEDIA_URL}qr_codes/{filename}'
+            print(qr_image_url)
+            # Create base64 data URL (for email)
+            qr_code_base64 = base64.b64encode(qr_buffer.getvalue()).decode("utf-8")
+            qr_email_src = f'data:image/png;base64,{qr_code_base64}'
+
+            # Compose and send email with embedded image
+            subject = '🎫 Your Ticket Confirmation'
+            html_content = f'''
+                <p>Hi {request.user.name},</p>
+                <p>Thank you for purchasing a ticket for <strong>{serializer.data["event"]}</strong>.</p>
+                <p>Here is your ticket QR code:</p>
+                <img src="cid:qr_code" alt="QR Code" style="width:200px;height:auto;" />
+                <p><strong>Ticket Code:</strong> {serializer.data["ticket_code"]}</p>
+                <p>Show this code at the event entrance.</p>
+                <br>
+                <p>Best regards,<br>Event Ticketing Team</p>
+            '''
+
+            send_email_via_sendgrid(
+                to_email="zaterahmed62@gmail.com",
+                subject=subject,
+                html_content=html_content,
+                qr_buffer=qr_buffer
+            )
+
+            # Include the QR code URL in the response
+            response_data = serializer.data
+            response_data['qr_code_url'] = qr_image_url
+            
+            return Response(response_data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-       
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def my_tickets(self, request):

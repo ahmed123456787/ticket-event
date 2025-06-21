@@ -2,14 +2,15 @@ from django.contrib import admin
 from django.urls import path,include
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
-from backend.ticket_system.services.graphql.schema import schema
+from ticket_system.graphql.schema import schema
 from ticket_system.views import PrivateGraphQLView, check_auth_status, LoginView, LogoutView, track_email_open, track_event_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -34,3 +35,7 @@ urlpatterns = [
     path('api/', include('ticket_system.services.urls')),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
