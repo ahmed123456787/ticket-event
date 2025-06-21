@@ -15,7 +15,7 @@ from datetime import timedelta
 import os 
 from dotenv import load_dotenv
 
-load_dotenv('.config')  # Load environment variables from .env file
+load_dotenv('.env.dev')  # Load environment variables from .env file
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
