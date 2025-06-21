@@ -70,9 +70,8 @@ class EventTicket(models.Model):
     Model representing an event ticket in the ticket system.
     """
   
-
     ticket_code = models.CharField(max_length=20, unique=True)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     purshased_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_used = models.BooleanField(default=False)
@@ -83,6 +82,8 @@ class EventTicket(models.Model):
     def __str__(self):
         return self.ticket_code
 
+    class Meta:
+        unique_together = ('user','event')
 
 class EventStats(models.Model):
     """

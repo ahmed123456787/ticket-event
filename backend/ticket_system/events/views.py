@@ -4,10 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from ticket_system.core.models import Event, EventTicket
 from ticket_system.core.permissions import IsAdminUser, IsOrganizerUser, IsVisitor
-from .serializers import EventSerializer, TicketSerializer  
+from .serializers import EventSerializer, TicketSerializer, TicketPaymentSerializer, TicketCheckInSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
 
 
 class EventViewSet(ModelViewSet):
@@ -82,7 +81,9 @@ class EventTicketViewSet(ModelViewSet):
         return EventTicket.objects.none()
     
     def perform_create(self, serializer):
+        """Override to set the user when creating a ticket"""
         serializer.save(user=self.request.user)
+        return super().perform_create(serializer)
         
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
@@ -96,48 +97,16 @@ class EventTicketViewSet(ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated, IsVisitor])
     def purchase(self, request):
-        event_id = request.data.get('event_id')
-        quantity = int(request.data.get('quantity', 1))
+        """Purchase a ticket for an event"""
+
         
-        if not event_id:
-            return Response({"error": "Event ID is required"}, status=status.HTTP_400_BAD_REQUEST)
-            
-        # Get the event
-        event = get_object_or_404(Event, id=event_id)
+        serializer = TicketPaymentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        # Check if event has available tickets
-        available_tickets = event.available_EventTickets
-        if available_tickets < quantity:
-            return Response(
-                {"error": f"Not enough tickets available. Only {available_tickets} left."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Create tickets
-        tickets = []
-        for _ in range(quantity):
-            ticket = EventTicket.objects.create(
-                event=event,
-                user=request.user,
-                price=event.EventTicket_price
-            )
-            tickets.append(ticket)
-        
-        # Decrease available tickets for the event
-        event.available_EventTickets -= quantity
-        event.save()
-        
-        serializer = self.get_serializer(tickets, many=True)
-        
-        # Add additional information to response for organizers
-        response_data = {
-            "tickets": serializer.data,
-            "total_price": event.EventTicket_price * quantity,
-            "event_name": event.name,
-            "purchase_date": tickets[0].created_at if tickets else None,
-        }
-        
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+       
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def my_tickets(self, request):
@@ -178,3 +147,15 @@ class EventTicketViewSet(ModelViewSet):
         ticket_data['purchase_date'] = ticket.created_at
         
         return Response(ticket_data)
+
+
+    @action(detail=False,methods=['post'], permission_classes=[IsAuthenticated, IsOrganizerUser])
+    def check_in(self,request):
+        """Check the ticket using ticket code"""
+
+        serializer = TicketCheckInSerializer(data=request.data)
+        if serializer.is_valid():
+            ticket = serializer.save()
+            return Response({"message": "Ticket checked in successfully", "ticket_code": ticket.ticket_code}, 
+                            status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

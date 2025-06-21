@@ -178,3 +178,5 @@ def track_event_view(request, event_id):
         return HttpResponse(status=204)  # No content response
     except Exception as e:
         return HttpResponse(str(e), status=400)
+
+

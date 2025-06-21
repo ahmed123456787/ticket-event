@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path,include
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
-from ticket_system.schema import schema
+from backend.ticket_system.services.graphql.schema import schema
 from ticket_system.views import PrivateGraphQLView, check_auth_status, LoginView, LogoutView, track_email_open, track_event_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -31,4 +31,6 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/', include('ticket_system.services.urls')),
+
 ]
