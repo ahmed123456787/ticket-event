@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Test</title>
+  </head>
+  <body>
+    <h1>WebSocket Client</h1>
+    <script>
+      const eventid = 1; // Replace with actual event ID
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxODk1OTI1LCJpYXQiOjE3NTE4OTE0MjUsImp0aSI6IjgzMWZiZWU3MmEyNjRhYzNhODA2ZThjZDk4YjkyYmRmIiwidXNlcl9pZCI6Mn0.mLLTijwFEEWX6Zw8-4FfGx1OGToSvaqF3E7-oCRXwIw"; // Replace with actual token
+
+      const ws = new WebSocket(
+        `ws://localhost:8000/ws/events/${eventid}/?token=${encodeURIComponent(
+          token
+        )}`
+      );
+
+      ws.onopen = () => {
+        console.log("WebSocket connection opened.");
+      };
+
+      ws.onmessage = (event) => {
+        console.log("Message received:", event.data);
+      };
+
+      ws.onclose = () => {
+        console.log("WebSocket connection closed.");
+      };
+
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+    </script>
+  </body>
+</html>
