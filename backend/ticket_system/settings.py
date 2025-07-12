@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     "django_filters",
     "graphene_django",
     'channels', 
-    'ticket_system.core',  # Make sure this is included
+    'ticket_system.core',  
     'ticket_system.events',  # Custom app for events
     'ticket_system.services',  # Custom app for services
     'rest_framework',  # Django REST Framework for API development
@@ -108,7 +108,7 @@ WSGI_APPLICATION = 'ticket_system.wsgi.application'
 ASGI_APPLICATION = "ticket_system.asgi.application"
 
 AUTH_USER_MODEL = 'core.User'  
-
+print(os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'))
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 

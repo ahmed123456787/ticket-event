@@ -3,3 +3,4 @@
 .env.dev
 config/.env
 config/.env.dev 
+./config/.env.dev
