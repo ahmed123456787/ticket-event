@@ -9,8 +9,8 @@ services:
     entrypoint: /app/deployment/entrypoint.sh
     volumes:
       - ..:/app
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000" # Changed from ports to expose since Nginx will handle external connections
     depends_on:
       db:
         condition: service_healthy
@@ -24,6 +24,19 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+
+  nginx:
+    image: nginx:alpine
+    container_name: event_ticket_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ../staticfiles:/app/staticfiles
+      - ../media:/app/media
+    depends_on:
+      - web
+    restart: always
 
   db:
     image: postgres:14

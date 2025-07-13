@@ -20,7 +20,7 @@ COPY deployment/entrypoint.sh /app/deployment/entrypoint.sh
 RUN chmod +x /app/deployment/entrypoint.sh
 
 # Copy project
-COPY . /app/
+COPY .. /app/
 
 # Ensure entrypoint is executable again after copying all files
 RUN chmod +x /app/deployment/entrypoint.sh
