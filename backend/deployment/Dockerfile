@@ -1,33 +1,48 @@
-FROM python:3.11-alpine
+# Build stage
+FROM python:3.11-alpine as builder
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+WORKDIR /build
 
-# Install dependencies and curl for healthchecks
-RUN apk add --no-cache curl
+# Install build dependencies
+RUN apk add --no-cache --virtual .build-deps \
+    gcc \
+    musl-dev \
+    python3-dev
 
 # Install dependencies
 COPY requirements/production.txt requirements/production.txt
 COPY requirements/base.txt requirements/base.txt
-RUN pip install --no-cache-dir -r requirements/production.txt
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /build/wheels -r requirements/production.txt
 
-# Copy entrypoint script
+# Final stage
+FROM python:3.11-alpine
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+RUN apk add --no-cache curl
+
+RUN adduser --disabled-password --no-create-home appuser
+
+COPY --from=builder /build/wheels /wheels
+RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/* && \
+    rm -rf /wheels
+
 COPY deployment/entrypoint.sh /app/deployment/entrypoint.sh
-
-# Fix permissions issue with explicit mode
 RUN chmod +x /app/deployment/entrypoint.sh
 
-# Copy project
-COPY .. /app/
+COPY . /app/
 
-# Ensure entrypoint is executable again after copying all files
-RUN chmod +x /app/deployment/entrypoint.sh
+RUN chown -R appuser:appuser /app
 
-# Expose port
+USER appuser
+
 EXPOSE 8000
 
-# Run startup script
 ENTRYPOINT ["/app/deployment/entrypoint.sh"]
 

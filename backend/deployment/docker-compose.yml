@@ -10,7 +10,7 @@ services:
     volumes:
       - ..:/app
     expose:
-      - "8000" # Changed from ports to expose since Nginx will handle external connections
+      - "8000" 
     depends_on:
       db:
         condition: service_healthy
@@ -39,7 +39,7 @@ services:
     restart: always
 
   db:
-    image: postgres:14
+    image: postgres:15-alpine3.21
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -56,7 +56,7 @@ services:
       start_period: 10s
 
   redis:
-    image: redis:7
+    image: redis:7.2-alpine
     ports:
       - "6378:6379"
     healthcheck:

@@ -17,6 +17,7 @@ A full-featured event ticketing platform backend built with Django, allowing org
   <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/icons/django.svg" height="40" alt="Django"/>
   <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/icons/python.svg" height="40" alt="Python"/>
   <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/icons/graphql.svg" height="40" alt="GraphQL"/>
+  <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/icons/docker.svg" height="40" alt="Docker"/>
 </div>
 
 ---
@@ -82,8 +83,8 @@ A full-featured event ticketing platform backend built with Django, allowing org
 <summary><b>💾 Database</b></summary>
 <br>
 
-- 🗃️ SQLite (development)
-- 🔄 Migrations support for other databases in production
+- 🐘 PostgreSQL (via Docker)
+- 🔄 Django Migrations
 </details>
 
 <details>
@@ -111,6 +112,15 @@ A full-featured event ticketing platform backend built with Django, allowing org
 </details>
 
 <details>
+<summary><b>🐳 Containerization</b></summary>
+<br>
+
+- 🐳 Docker for containerization
+- 🔄 Docker Compose for orchestration
+- 🌐 Nginx for reverse proxy
+</details>
+
+<details>
 <summary><b>📚 Documentation & Schemas</b></summary>
 <br>
 
@@ -125,6 +135,13 @@ event_ticket/backend/
 ├── manage.py                  # Django management script
 ├── requirements.txt           # Project dependencies
 ├── client.html                # WebSocket test client
+│
+├── deployment/                # Docker deployment files
+│   ├── docker-compose.yml     # Docker Compose configuration
+│   ├── Dockerfile             # Docker image definition
+│   ├── entrypoint.sh          # Container entry point script
+│   └── nginx/                 # Nginx configuration
+│       └── default.conf       # Nginx virtual host config
 │
 ├── ticket_system/             # Main Django project
 │   ├── __init__.py
@@ -176,13 +193,12 @@ event_ticket/backend/
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.10+-yellow?style=for-the-badge&logo=python&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-required-red?style=for-the-badge&logo=redis&logoColor=white)
-![RabbitMQ](https://img.shields.io/badge/RabbitMQ-optional-orange?style=for-the-badge&logo=rabbitmq&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-required-blue?style=for-the-badge&logo=docker&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker_Compose-required-blue?style=for-the-badge&logo=docker&logoColor=white)
 
 </div>
 
-### ⚙️ Installation Steps
+### ⚙️ Docker Installation Steps
 
 <details open>
 <summary><b>Step-by-Step Guide</b></summary>
@@ -191,68 +207,79 @@ event_ticket/backend/
 
    ```bash
    git clone https://github.com/ahmed123456787/ticket-event.git
-   cd event_ticket/backend
+   cd event_ticket
    ```
 
-2. **Create and activate a virtual environment** 🔮
+2. **Set up environment variables** 🔑
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-   ```
-
-3. **Install dependencies** 📦
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up environment variables** 🔑
-
-   Create a `.env.dev` file in the project root with:
+   Create a `config/.env` file in the project root with:
 
    ```
    SENDGRID_API_KEY=your_sendgrid_api_key
+   DB_NAME=event_ticket
+   DB_USER=postgres
+   DB_PASSWORD=postgres
+   DB_HOST=db
+   REDIS_HOST=redis
+   REDIS_PORT=6379
    ```
 
-5. **Run migrations** 🔄
+3. **Build and start the Docker containers** 🐳
 
    ```bash
-   python manage.py migrate
+   cd backend/deployment
+   docker-compose up -d
    ```
 
-6. **Create a superuser** 👑
+4. **Create a superuser** 👑
 
    ```bash
-   python manage.py createsuperuser
+   docker-compose exec web python manage.py createsuperuser
    ```
 
-7. **Run the development server** 🚀
-   ```bash
-   python manage.py runserver
+5. **Access the application** 🚀
+
+   The application will be available at:
+
    ```
+   http://localhost:80
+   ```
+
    </details>
 
-### 🔧 Additional Services Setup
+### 🔧 Docker Commands Reference
 
 <details>
-<summary><b>Start Required Services</b></summary>
+<summary><b>Useful Docker Commands</b></summary>
 
-1. **Start Redis server** 🔴
+1. **Start all services** 🏁
 
    ```bash
-   redis-server
+   docker-compose up -d
    ```
 
-2. **Run Celery worker** 🧠
+2. **Stop all services** 🛑
 
    ```bash
-   celery -A ticket_system worker -l info
+   docker-compose down
    ```
 
-3. **Run Celery beat** ⏰
+3. **View logs** 📋
+
    ```bash
-   celery -A ticket_system beat -l info
+   docker-compose logs -f web  # For web service logs
+   docker-compose logs -f      # For all services
+   ```
+
+4. **Run Django management commands** 💻
+
+   ```bash
+   docker-compose exec web python manage.py <command>
+   ```
+
+5. **Rebuild containers after changes** 🔄
+   ```bash
+   docker-compose up -d --build
    ```
    </details>
 
@@ -262,8 +289,8 @@ event_ticket/backend/
 
 Once the server is running, access the API documentation at:
 
-[![Swagger UI](https://img.shields.io/badge/Swagger_UI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](http://localhost:8000/api/docs/)
-[![API Schema](https://img.shields.io/badge/API_Schema-5E97BD?style=for-the-badge&logo=openapi-initiative&logoColor=white)](http://localhost:8000/api/schema/)
+[![Swagger UI](https://img.shields.io/badge/Swagger_UI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](http://localhost/api/docs/)
+[![API Schema](https://img.shields.io/badge/API_Schema-5E97BD?style=for-the-badge&logo=openapi-initiative&logoColor=white)](http://localhost/api/schema/)
 
 </div>
 
@@ -305,8 +332,8 @@ Once the server is running, access the API documentation at:
 
 GraphQL API is available at:
 
-[![Public API](https://img.shields.io/badge/Public_API-E10098?style=for-the-badge&logo=graphql&logoColor=white)](/graphql/public/)
-[![Private API](https://img.shields.io/badge/Private_API-E10098?style=for-the-badge&logo=graphql&logoColor=white)](/graphql/)
+[![Public API](https://img.shields.io/badge/Public_API-E10098?style=for-the-badge&logo=graphql&logoColor=white)](http://localhost/graphql/public/)
+[![Private API](https://img.shields.io/badge/Private_API-E10098?style=for-the-badge&logo=graphql&logoColor=white)](http://localhost/graphql/)
 
 </div>
 
